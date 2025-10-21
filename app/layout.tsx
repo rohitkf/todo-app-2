@@ -1,8 +1,5 @@
 import { Toaster } from 'react-hot-toast'
 import './globals.css'
-import { Inter } from 'next/font/google'
-
-const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
   title: 'Create Your ToDo List',
@@ -16,7 +13,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang='en'>
-      <body className={inter.className}>
+      <body className='font-sans antialiased'>
         {children}
         <Toaster position='top-center' />
       </body>

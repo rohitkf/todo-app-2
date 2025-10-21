@@ -1,6 +1,7 @@
 import prisma from './prisma'
+import { Todo } from '@/types/prisma'
 
-export async function getTodos() {
+export async function getTodos(): Promise<{ todos?: Todo[]; error?: unknown }> {
   try {
     const todos = await prisma.todo.findMany({
       orderBy: {

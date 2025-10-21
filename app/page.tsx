@@ -1,13 +1,11 @@
 import { getTodos } from '@/lib/todos'
 import NewTodoForm from '@/components/NewTodoForm'
 import TodoItem from '@/components/TodoItem'
-import { unstable_noStore } from 'next/cache'
 import DeleteAllToDo from './components/DeleteAllToDo'
 
-// export const dynamic = 'force-dynamic'
+export const dynamic = 'force-dynamic'
 
 const Page = async () => {
-  unstable_noStore()
   const { todos } = await getTodos()
 
   return (

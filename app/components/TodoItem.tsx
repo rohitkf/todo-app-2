@@ -2,7 +2,7 @@
 
 import { useTransition } from 'react'
 
-import { Todo } from '@prisma/client'
+import { Todo } from '@/types/prisma'
 import { updateTodoAction, deleteTodoAction } from '@/app/_actions'
 import { redirect } from 'next/navigation'
 import toast from 'react-hot-toast'
