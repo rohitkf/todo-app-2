@@ -1,30 +1,36 @@
 import { getTodos } from '@/lib/todos'
 import NewTodoForm from '@/components/NewTodoForm'
 import TodoItem from '@/components/TodoItem'
-import { unstable_noStore } from 'next/cache'
 import DeleteAllToDo from './components/DeleteAllToDo'
 
-// export const dynamic = 'force-dynamic'
+export const dynamic = 'force-dynamic'
 
 const Page = async () => {
-  unstable_noStore()
   const { todos } = await getTodos()
 
   return (
-    <section className='py-20'>
-      <div className='container'>
-        <h1 className='mb-10 w-fit bg-slate-100 px-2 text-3xl font-bold text-slate-800'>
-          Todos
+    <section className='min-h-screen py-12 px-4'>
+      <div className='container mx-auto max-w-4xl'>
+        <h1 className='mb-10 text-5xl font-bold text-white drop-shadow-lg'>
+          My Todos
         </h1>
 
         <NewTodoForm />
-        <div className='my-7 flex items-center justify-between border-b'>
-          <h2 className=' text-xl font-semibold'>List of todos:</h2>
+
+        <div className='glass my-8 flex flex-wrap items-center justify-between gap-4 rounded-2xl p-6'>
+          <h2 className='text-2xl font-semibold text-white'>Your Tasks</h2>
           <DeleteAllToDo />
         </div>
-        <ul className='mt-4 flex flex-col gap-1'>
-          {todos?.map(todo => <TodoItem key={todo.id} todo={todo} />)}
-        </ul>
+
+        {todos && todos.length > 0 ? (
+          <ul className='flex flex-col'>
+            {todos.map(todo => <TodoItem key={todo.id} todo={todo} />)}
+          </ul>
+        ) : (
+          <div className='glass rounded-2xl p-8 text-center'>
+            <p className='text-white/70'>No todos yet. Create one to get started!</p>
+          </div>
+        )}
       </div>
     </section>
   )
