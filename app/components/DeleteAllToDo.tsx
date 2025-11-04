@@ -1,31 +1,31 @@
 'use client'
-import React, { useState } from 'react'
+
+import { useTransition } from 'react'
 import { deleteAllToDoAction } from '../_actions'
 import toast from 'react-hot-toast'
 
 function DeleteAllToDo() {
-  const [loader, setLoading] = useState(false)
+  const [isPending, startTransition] = useTransition()
 
-  const handleDeleteAllToDo = async () => {
-    setLoading(true)
-    try {
-      await deleteAllToDoAction()
-      toast.success('All ToDos Deleted Successfully')
-      setLoading(false)
-    } catch (error) {
-      setLoading(false)
-      toast.error('Something went wrong')
-      console.log(error)
-    }
+  const handleDeleteAllToDo = () => {
+    startTransition(async () => {
+      try {
+        await deleteAllToDoAction()
+        toast.success('All ToDos Deleted Successfully')
+      } catch (error) {
+        toast.error('Something went wrong')
+        console.error('Error deleting todos:', error)
+      }
+    })
   }
 
   return (
     <button
       onClick={handleDeleteAllToDo}
-      className='mb-3 ml-2 rounded bg-slate-700 px-2 py-2 text-sm text-white'
-      disabled={loader}
+      className='rounded-lg bg-red-500/20 px-6 py-2 text-sm font-medium text-white backdrop-blur-sm transition-all hover:bg-red-500/30 disabled:opacity-50'
+      disabled={isPending}
     >
-      Delete All
+      {isPending ? 'Deleting...' : 'Delete All'}
     </button>
   )
 }

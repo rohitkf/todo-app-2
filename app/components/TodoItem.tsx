@@ -21,7 +21,7 @@ const TodoItem = ({ todo }: TodoItemProps) => {
   }
 
   return (
-    <li className='duration-250 group mb-2 flex flex-wrap items-center gap-3 rounded border-2 border-gray-500 p-1 transition-all ease-in-out hover:-translate-y-1 hover:bg-slate-400 hover:text-white'>
+    <li className='group mb-3 flex flex-wrap items-center gap-3 rounded-2xl glass p-4 transition-all duration-300 ease-in-out hover:scale-[1.02] hover:bg-white/20'>
       <input
         id={todo.id}
         type='checkbox'
@@ -29,23 +29,23 @@ const TodoItem = ({ todo }: TodoItemProps) => {
         onChange={e =>
           startTransition(() => updateTodoAction(todo.id, e.target.checked))
         }
-        className='peer h-4 w-4 cursor-pointer rounded border-gray-300 text-slate-600 focus:ring-slate-600'
+        className='peer h-5 w-5 cursor-pointer rounded border-white/30 bg-white/10 text-purple-500 transition-all focus:ring-2 focus:ring-white/50'
       />
       <label
         htmlFor={todo.id}
-        className='break-all peer-checked:text-slate-500 peer-checked:line-through'
+        className='cursor-pointer break-all text-white transition-all peer-checked:text-white/50 peer-checked:line-through'
       >
         {todo.title}
       </label>
-      <span className='ml-auto text-sm text-slate-500 group-hover:text-white peer-checked:line-through'>
-        {todo.updatedAt.toUTCString()}
+      <span className='ml-auto text-xs text-white/60 transition-all group-hover:text-white/80 peer-checked:line-through'>
+        {todo.updatedAt.toLocaleDateString()}
       </span>
       <button
         type='button'
         onClick={() => deleteTodo(todo.id)}
-        className='ml-2 rounded bg-slate-700 px-2 py-1 text-sm text-white disabled:bg-opacity-50'
+        className='ml-2 rounded-lg bg-red-500/20 px-3 py-1 text-sm text-white backdrop-blur-sm transition-all hover:bg-red-500/30 disabled:opacity-50'
       >
-        X
+        Delete
       </button>
     </li>
   )

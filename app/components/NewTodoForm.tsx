@@ -1,56 +1,51 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useRef, useTransition } from 'react'
 import { createTodoAction } from '@/app/_actions'
 import toast from 'react-hot-toast'
 
 const NewTodoForm = () => {
-  const [loader, setLoading] = useState(false) // Changed initial state to false
+  const [isPending, startTransition] = useTransition()
   const formRef = useRef<HTMLFormElement>(null)
 
   async function action(data: FormData) {
-    setLoading(true) // Set loading to true when action starts
     const title = data.get('title')
-    if (typeof title !== 'string' || !title || title.length < 0) {
-      setLoading(false) // Reset loading state if validation fails
+    if (typeof title !== 'string' || !title || title.length === 0) {
+      toast.error('Please enter a todo')
       return
     }
-    try {
-      await createTodoAction(title)
-      toast.success('Todo Added Successfully')
-      setLoading(false) //True
-      formRef.current?.reset()
-    } catch (error) {
-      toast.error('Something went wrong')
-      setLoading(false)
-      console.error('Error creating todo:', error)
-    }
-  }
 
-  function handleButtonClick() {
-    setLoading(true) // Set loading to true immediately upon clicking
-    formRef.current?.dispatchEvent(
-      new Event('submit', { bubbles: true, cancelable: true })
-    )
+    startTransition(async () => {
+      try {
+        await createTodoAction(title)
+        toast.success('Todo Added Successfully')
+        formRef.current?.reset()
+      } catch (error) {
+        toast.error('Something went wrong')
+        console.error('Error creating todo:', error)
+      }
+    })
   }
 
   return (
-    <form ref={formRef} action={action}>
-      <h2 className='mb-2 font-medium'>Create a New Todo</h2>
-      <input
-        type='text'
-        maxLength={100}
-        name='title'
-        className='rounded border border-slate-400 px-2 py-0.5'
-      />
-      <button
-        type='submit'
-        className='ml-2 rounded bg-slate-700 px-2 py-1 text-sm text-white disabled:bg-opacity-50'
-        disabled={loader}
-        onClick={handleButtonClick}
-      >
-        {loader ? 'Adding Todo...' : 'Add Todo'}
-      </button>
+    <form ref={formRef} action={action} className='glass rounded-2xl p-6'>
+      <h2 className='mb-4 text-lg font-medium text-white'>Create a New Todo</h2>
+      <div className='flex flex-wrap gap-3'>
+        <input
+          type='text'
+          maxLength={100}
+          name='title'
+          className='flex-1 min-w-[200px] rounded-lg border border-white/30 bg-white/10 px-4 py-2 text-white placeholder-white/50 backdrop-blur-sm transition-all focus:border-white/50 focus:outline-none focus:ring-2 focus:ring-white/30'
+          placeholder='Enter your todo...'
+        />
+        <button
+          type='submit'
+          className='rounded-lg bg-white/20 px-6 py-2 text-sm font-medium text-white backdrop-blur-sm transition-all hover:bg-white/30 disabled:opacity-50'
+          disabled={isPending}
+        >
+          {isPending ? 'Adding...' : 'Add Todo'}
+        </button>
+      </div>
     </form>
   )
 }
